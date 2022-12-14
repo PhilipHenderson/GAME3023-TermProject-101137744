@@ -1,10 +1,13 @@
 using UnityEngine;
 
+public enum EnemyType { Baby, Teen, FullGrown }
+
 public class Unit : MonoBehaviour
 {
     [Header("Unit Info")]
     public string Unitname;
     public int Unitlvl;
+    public EnemyType type;
     public int dmg;
     public int defendedDmg = 2;
     public int maxHp;

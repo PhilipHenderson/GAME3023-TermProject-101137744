@@ -1,16 +1,16 @@
 using System;
 using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
+using Random = UnityEngine.Random;
 
 public enum BattleState { START, PLAYERTURN, ENEMYTURN, WON, LOST }
 
 public class BattleSystems : MonoBehaviour
 {
     public GameObject playerPrefab;
-    public GameObject enemyPrefab;
+    public GameObject[] enemyPrefabs;
+    private GameObject currentEnemy;
 
     public GameObject playerFlameIcon;
     public GameObject playerIceIcon;
@@ -26,16 +26,19 @@ public class BattleSystems : MonoBehaviour
     Unit enemyUnit;
 
     public TMP_Text encounterTxt;
+    public bool encounter;
 
     public BattlePlatform playerHud;
     public BattlePlatform enemyHud;
 
     public BattleState states;
-    private System.Random rnd = new System.Random();
+    public System.Random rnd = new System.Random();
 
     // Start is called before the first frame update
-    void Start()
+    public void Start()
     {
+        var rndIndex = Random.Range(0, enemyPrefabs.Length -1);
+        currentEnemy = enemyPrefabs[rndIndex];
         states = BattleState.START;
         StartCoroutine(BattleSetup());
         playerUnit.defendedDmg = playerUnit.dmg / 2;
@@ -47,7 +50,9 @@ public class BattleSystems : MonoBehaviour
     {
         GameObject player = Instantiate(playerPrefab, playerPlatform);
         playerUnit = player.GetComponent<Unit>();
-        GameObject enemy = Instantiate(enemyPrefab, enemyPlatform);
+
+
+        GameObject enemy = Instantiate(currentEnemy, enemyPlatform);
         enemyUnit = enemy.GetComponent<Unit>();
 
         // Create More of these and randomize it

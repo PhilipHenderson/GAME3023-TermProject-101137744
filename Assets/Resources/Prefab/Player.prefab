@@ -81,7 +81,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 1
-  m_Sprite: {fileID: 1370456150, guid: 6a25388c0fd492d4ea443d7db4f23e2c, type: 3}
+  m_Sprite: {fileID: 21300014, guid: b62a8e74a325e4493956501c30341010, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -108,6 +108,8 @@ MonoBehaviour:
   player: {fileID: 2915056140936028665}
   rigidbody: {fileID: 16056305924026231}
   animator: {fileID: 1759230007}
+  isRaining: 1
+  rain: {fileID: 1861507347}
   isLoading: 1
   xPosition: 0
   yPosition: 0
@@ -163,6 +165,7 @@ MonoBehaviour:
   onTrasportToNewScene:
     m_PersistentCalls:
       m_Calls: []
+  playerCharacterMovement: {fileID: 2915056140936028666}
 --- !u!114 &913610031191633093
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -180,7 +183,7 @@ MonoBehaviour:
   m_BlendStyleIndex: 0
   m_FalloffIntensity: 0.51
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_Intensity: 1.08
+  m_Intensity: 0.5
   m_LightVolumeIntensity: 1
   m_LightVolumeIntensityEnabled: 0
   m_ApplyToSortingLayers: 290b29c66fd1ded35151f1069b3c0f5e00000000db057e20371b8270
@@ -230,7 +233,7 @@ MonoBehaviour:
     m_Extent: {x: 0.9985302, y: 0.99853027, z: 0}
   m_PointLightInnerAngle: 360
   m_PointLightOuterAngle: 360
-  m_PointLightInnerRadius: 0.94
+  m_PointLightInnerRadius: 0.2
   m_PointLightOuterRadius: 1
   m_ShapeLightParametricSides: 5
   m_ShapeLightParametricAngleOffset: 0
@@ -507,6 +510,11 @@ PrefabInstance:
     m_RemovedComponents: []
     m_AddedGameObjects: []
   m_SourcePrefab: {fileID: 100100000, guid: 990fc48b520b49f4aa4b68a5a04cdced, type: 3}
+--- !u!1 &1861507347 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1122339018074709717, guid: 990fc48b520b49f4aa4b68a5a04cdced, type: 3}
+  m_PrefabInstance: {fileID: 1122339016416626630}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &1861507348 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1122339018074709714, guid: 990fc48b520b49f4aa4b68a5a04cdced, type: 3}

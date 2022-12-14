@@ -17,6 +17,10 @@ public class PlayerCharacterMovement : MonoBehaviour
     [SerializeField]
     Animator animator;
 
+    [Header("Other Options")]
+    public bool isRaining;
+    public GameObject rain;
+
     Traveller traveller;
 
     Vector2 startPos;
@@ -64,6 +68,13 @@ public class PlayerCharacterMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (!isRaining)
+        {
+            rain.SetActive(false);
+        }
+        else
+            rain.SetActive(true);
+
         Debug.Log(isLoading);
 
         if (Input.GetKeyUp(KeyCode.K))

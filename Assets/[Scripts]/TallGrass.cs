@@ -15,6 +15,8 @@ public class TallGrass : MonoBehaviour
             //Start Encounter
             encounter.SetActive(true);
         }
+        else
+            encounter.SetActive(false);
     }
     public void OnTriggerEnter2D(Collider2D other)
     {

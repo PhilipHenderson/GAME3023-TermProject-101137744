@@ -8,11 +8,16 @@ public class Traveller : MonoBehaviour
 {
     public UnityEvent<Scene> onTrasportToNewScene;
 
+    [SerializeField]
+    PlayerCharacterMovement playerCharacterMovement;
+
     private string lastSpawn = "";
-    public void SetSpawn(string spawn)
+
+    private void Awake()
     {
-        lastSpawn = spawn;
+        playerCharacterMovement = GetComponent<PlayerCharacterMovement>();
     }
+
     private void Start()
     {
 #if UNITY_EDITOR
@@ -21,6 +26,11 @@ public class Traveller : MonoBehaviour
         DontDestroyOnLoad(this); // this tells unitl that this game Ongect sholulf not be cleaned up with all
 
         SceneManager.sceneLoaded += OnSceneLoadedAction;
+    }
+
+    public void SetSpawn(string spawn)
+    {
+        lastSpawn = spawn;
     }
 
     void OnSceneLoadedAction(Scene scene, LoadSceneMode loadmode)
@@ -38,7 +48,14 @@ public class Traveller : MonoBehaviour
                     //go to that spawn
                     transform.position = spawn.transform.position;
                     transportSuccessful = true;
-                    break;
+                }
+                if (spawn.name == "DW-Portal End")
+                {
+                    playerCharacterMovement.isRaining = true;
+                }
+                if (spawn.name == "Inn-Portal End")
+                {
+                    playerCharacterMovement.isRaining = false;
                 }
             }
 
