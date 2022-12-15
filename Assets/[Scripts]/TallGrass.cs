@@ -2,22 +2,38 @@ using UnityEngine;
 
 public class TallGrass : MonoBehaviour
 {
+    [Header("Tall Grass Properties")]
     public int percentageChance;
     public bool hasEnteredEncounter;
-    public GameObject encounter;
+
+    [Header("Game System Objects")]
+    public GameObject encounterWindow;
+    public GameObject battleSystemsGameObject;
+
+    BattleSystems battleSystems;
 
     private int chanceOfEncounter;
+    private bool battleSystemsBool;
+
+    private void Awake()
+    {
+        battleSystems = battleSystemsGameObject.GetComponent<BattleSystems>();
+    }
+
+    private void Start()
+    {
+        battleSystemsBool = battleSystems.inBattle;
+        encounterWindow.SetActive(false);
+    }
 
     public void Update()
     {
-        if (hasEnteredEncounter)
+        if (battleSystemsBool)
         {
-            //Start Encounter
-            encounter.SetActive(true);
+            Debug.Log("battleSystemsBool =" + battleSystemsBool);
         }
-        else
-            encounter.SetActive(false);
     }
+
     public void OnTriggerEnter2D(Collider2D other)
     {
         if (other.gameObject.tag == "Player")
@@ -25,7 +41,7 @@ public class TallGrass : MonoBehaviour
             chanceOfEncounter = Random.Range(0, 100);
             if (chanceOfEncounter < percentageChance)
             {
-                hasEnteredEncounter = true;
+                encounterWindow.SetActive(true);
                 Debug.Log("hasEnteredEncounter: " + hasEnteredEncounter);
             }
         }

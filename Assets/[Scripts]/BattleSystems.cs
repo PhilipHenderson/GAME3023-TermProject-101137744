@@ -8,49 +8,65 @@ public enum BattleState { START, PLAYERTURN, ENEMYTURN, WON, LOST }
 
 public class BattleSystems : MonoBehaviour
 {
+    [SerializeField]
+    Unit playerUnit;
+    [SerializeField]
+    Unit enemyUnit;
+
+    [Header("Encounter Units")]
     public GameObject playerPrefab;
     public GameObject[] enemyPrefabs;
     private GameObject currentEnemy;
 
+    [Header("Icons")]
     public GameObject playerFlameIcon;
     public GameObject playerIceIcon;
+    public GameObject playerWindIcon;
     public GameObject enemyFlameIcon;
     public GameObject enemyIceIcon;
-    public GameObject playerWindIcon;
     public GameObject enemyWindIcon;
 
+    [Header("Platforms")]
     public Transform playerPlatform;
     public Transform enemyPlatform;
 
-    Unit playerUnit;
-    Unit enemyUnit;
-
-    public TMP_Text encounterTxt;
-    public bool encounter;
-
+    [Header("Huds")]
     public BattlePlatform playerHud;
     public BattlePlatform enemyHud;
 
+    public bool inBattle;
+    [SerializeField]
     public BattleState states;
-    public System.Random rnd = new System.Random();
+
+    [Header("Encounter Window")]
+    public GameObject encounterwindow;
+    public TMP_Text encounterTxt;
 
     // Start is called before the first frame update
     public void Start()
     {
-        var rndIndex = Random.Range(0, enemyPrefabs.Length -1);
-        currentEnemy = enemyPrefabs[rndIndex];
-        states = BattleState.START;
-        StartCoroutine(BattleSetup());
-        playerUnit.defendedDmg = playerUnit.dmg / 2;
-        enemyUnit.defendedDmg = enemyUnit.dmg / 2;
+        inBattle = false;
     }
-
+    public void Update()
+    {
+        if (encounterwindow.activeSelf == true)
+        {
+            if (inBattle == false)
+            {
+                states = BattleState.START; 
+                StartCoroutine(BattleSetup());
+            }
+        }
+    }
 
     IEnumerator BattleSetup()
     {
+        inBattle = true;
         GameObject player = Instantiate(playerPrefab, playerPlatform);
         playerUnit = player.GetComponent<Unit>();
 
+        var rndIndex = Random.Range(0, enemyPrefabs.Length -1);
+        currentEnemy = enemyPrefabs[rndIndex];
 
         GameObject enemy = Instantiate(currentEnemy, enemyPlatform);
         enemyUnit = enemy.GetComponent<Unit>();
@@ -258,9 +274,13 @@ public class BattleSystems : MonoBehaviour
             }
         }
         else
-            encounterTxt.text = "No Ailments";
+            encounterTxt.text = "No Alements";
 
         // 2. Main Round - Enemy Logic
+
+        encounterTxt.text = "Enemy's Turn";
+
+        yield return new WaitForSeconds(2.0f);
 
         // --AI Section--
         //CHECKLIST:
@@ -270,6 +290,8 @@ public class BattleSystems : MonoBehaviour
         {
             //Enemy Attempts to flee
             states = BattleState.WON;
+            encounterTxt.text = "The Enemy Has Defeated You";
+            yield return new WaitForSeconds(2.0f);
             EndBattle();
         }
 
@@ -285,7 +307,7 @@ public class BattleSystems : MonoBehaviour
         }
 
 
-        var num = rnd.Next(0, 3);
+        var num = Random.Range(0, 3);
         // 3. Abilities
         if (num != 0)
         {
@@ -299,10 +321,11 @@ public class BattleSystems : MonoBehaviour
         PlayerTurn();
         states = BattleState.PLAYERTURN;
     }
+        
 
     public void EnemyAttackDefend()
     {
-        var num3 = rnd.Next(0, 9);
+        var num3 = Random.Range(0, 9);
         //-Attack-
         if (num3 <= 7)
         {
@@ -320,7 +343,7 @@ public class BattleSystems : MonoBehaviour
 
     public void EnemyAbilities()
     {
-        var num2 = rnd.Next(0, 5);
+        var num2 = Random.Range(0, 5);
 
         if (num2 >= 4)
         {
@@ -353,6 +376,10 @@ public class BattleSystems : MonoBehaviour
 
     void PlayerTurn()
     {
+        if (playerUnit.currentHp == 0)
+        {
+            EndBattle();
+        }
         encounterTxt.text = "Please Choose An Action:";
     }
 
@@ -360,12 +387,37 @@ public class BattleSystems : MonoBehaviour
     {
         if (states == BattleState.WON)
         {
+            Reset();
             encounterTxt.text = "You Have Defeated The Enemy";
+            encounterwindow.SetActive(false);
+            StartCoroutine(BattleSetup()); 
         }
         else if (states == BattleState.LOST)
         {
+            Reset();
             encounterTxt.text = "The Enemy Has Defeated You";
+            encounterwindow.SetActive(false);
+            StartCoroutine(BattleSetup());
         }
+    }
+
+    public void Reset()
+    {
+        //player reset
+        playerUnit.currentHp = playerUnit.maxHp;
+        playerUnit.currentMp = playerUnit.maxMp;
+        playerUnit.isBlownAway = false;
+        playerUnit.isDefending = false;
+        playerUnit.isFrozen = false;
+        playerUnit.isOnFire = false;
+
+        //enemy resets
+        enemyUnit.currentHp = enemyUnit.maxHp;
+        enemyUnit.currentHp = enemyUnit.maxMp;
+        enemyUnit.isBlownAway = false;
+        enemyUnit.isDefending = false;
+        enemyUnit.isFrozen = false;
+        enemyUnit.isOnFire = false;
     }
 
 

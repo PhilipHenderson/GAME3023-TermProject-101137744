@@ -98,25 +98,25 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Unitname: Blue Dragon
-  Unitlvl: 50
-  type: 2
-  dmg: 50
-  defendedDmg: 25
-  maxHp: 1000
-  currentHp: 0
-  maxMp: 600
-  currentMp: 0
-  fireBlastDmg: 0
-  burningDmg: 0
-  burningTurnsLeft: 0
-  fireMpCost: 0
-  icePistolDmg: 50
-  freezingDmg: 10
+  Unitlvl: 15
+  type: 1
+  dmg: 15
+  defendedDmg: 10
+  maxHp: 300
+  currentHp: 300
+  maxMp: 200
+  currentMp: 200
+  fireBlastDmg: 1
+  burningDmg: 1
+  burningTurnsLeft: 1
+  fireMpCost: 1
+  icePistolDmg: 15
+  freezingDmg: 5
   freezingTurnsLeft: 5
-  iceMpCost: 20
-  BlownAwayTurnsLeft: 0
-  windMpCost: 0
-  healMpCost: 100
+  iceMpCost: 25
+  BlownAwayTurnsLeft: 1
+  windMpCost: 1
+  healMpCost: 25
   isDefending: 0
   isOnFire: 0
   isBlownAway: 0

@@ -9,7 +9,7 @@ public class Unit : MonoBehaviour
     public int Unitlvl;
     public EnemyType type;
     public int dmg;
-    public int defendedDmg = 2;
+    public int defendedDmg;
     public int maxHp;
     public int currentHp;
     public int maxMp;

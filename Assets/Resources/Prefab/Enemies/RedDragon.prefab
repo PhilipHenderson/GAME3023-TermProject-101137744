@@ -104,9 +104,9 @@ MonoBehaviour:
   dmg: 50
   defendedDmg: 45
   maxHp: 1000
-  currentHp: 0
+  currentHp: 1000
   maxMp: 600
-  currentMp: 0
+  currentMp: 600
   fireBlastDmg: 50
   burningDmg: 10
   burningTurnsLeft: 5

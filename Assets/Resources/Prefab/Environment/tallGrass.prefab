@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 1175888107835565997}
   - component: {fileID: 1175888107835566003}
   - component: {fileID: 1175888107835565996}
-  - component: {fileID: 1175888107835566002}
+  - component: {fileID: 7371366279932081786}
   m_Layer: 0
   m_Name: tallGrass
   m_TagString: Untagged
@@ -102,7 +102,7 @@ CircleCollider2D:
   m_Offset: {x: 0.00076818466, y: 0}
   serializedVersion: 2
   m_Radius: 0.05724287
---- !u!114 &1175888107835566002
+--- !u!114 &7371366279932081786
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -116,4 +116,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   percentageChance: 10
   hasEnteredEncounter: 0
-  encounter: {fileID: 0}
+  encounterWindow: {fileID: 6149757740316644825, guid: 8f1c6326b73d9794cbf895907ec597a1, type: 3}
+  battleSystemsGameObject: {fileID: 6149757740316644825, guid: 8f1c6326b73d9794cbf895907ec597a1, type: 3}
