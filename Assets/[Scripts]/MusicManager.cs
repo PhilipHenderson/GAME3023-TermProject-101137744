@@ -13,8 +13,9 @@ public class MusicManager : MonoBehaviour
     public enum TrackID
     {
         TOWN,
-        DAYWORLD,
-        NIGHTWORLD,
+        BATTLE,
+        TAVERN,
+        DUNGION,
         MAINMENU
     }
 
@@ -72,6 +73,22 @@ public class MusicManager : MonoBehaviour
             DontDestroyOnLoad(gameObject);
         }
 
+    }
+
+    void OnSceneLoaded(Scene newScene, LoadSceneMode loadMode)
+    {
+        if (newScene.name == "MainMenu")
+        {
+            CrossFadeTo(TrackID.MAINMENU);
+        }
+        if (newScene.name == "Town")
+        {
+            CrossFadeTo(TrackID.TOWN);
+        }
+        if (newScene.name == "Tavern")
+        {
+            CrossFadeTo(TrackID.TAVERN);
+        }
     }
 
     //Add a mothod for :

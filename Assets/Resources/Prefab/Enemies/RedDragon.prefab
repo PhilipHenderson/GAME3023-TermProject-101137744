@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 6905898047462107255}
   - component: {fileID: 7487963569918287822}
   - component: {fileID: 343951939161464081}
-  - component: {fileID: 4279776110604376003}
   m_Layer: 0
   m_Name: RedDragon
   m_TagString: Untagged
@@ -98,6 +97,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 65f1538a68e77144f81e553cf146bc55, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  fireBlast: {fileID: 0}
+  windCannon: {fileID: 0}
+  icePistol: {fileID: 0}
+  basicAttack: {fileID: 0}
+  flee: {fileID: 0}
   Unitname: Red Dragon
   Unitlvl: 50
   type: 2
@@ -107,54 +111,4 @@ MonoBehaviour:
   currentHp: 1000
   maxMp: 600
   currentMp: 600
-  fireBlastDmg: 50
-  burningDmg: 10
-  burningTurnsLeft: 5
-  fireMpCost: 50
-  icePistolDmg: 0
-  freezingDmg: 0
-  freezingTurnsLeft: 0
-  iceMpCost: 0
-  BlownAwayTurnsLeft: 0
-  windMpCost: 0
-  healMpCost: 100
-  isDefending: 0
-  isOnFire: 0
-  isBlownAway: 0
-  isFrozen: 0
---- !u!114 &4279776110604376003
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3221686261778945716}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 65f1538a68e77144f81e553cf146bc55, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Unitname: Red Dragon
-  Unitlvl: 50
-  type: 2
-  dmg: 25
-  defendedDmg: 20
-  maxHp: 1000
-  currentHp: 0
-  maxMp: 500
-  currentMp: 0
-  fireBlastDmg: 0
-  burningDmg: 0
-  burningTurnsLeft: 0
-  fireMpCost: 0
-  icePistolDmg: 50
-  freezingDmg: 10
-  freezingTurnsLeft: 5
-  iceMpCost: 20
-  BlownAwayTurnsLeft: 0
-  windMpCost: 0
-  healMpCost: 50
-  isDefending: 0
-  isOnFire: 0
-  isBlownAway: 0
-  isFrozen: 0
+  battleSystems: {fileID: 0}

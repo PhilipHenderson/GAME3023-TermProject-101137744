@@ -50,18 +50,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 65f1538a68e77144f81e553cf146bc55, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  fireBlast: {fileID: 0}
+  windCannon: {fileID: 0}
+  icePistol: {fileID: 0}
+  basicAttack: {fileID: 0}
+  flee: {fileID: 0}
   Unitname: Tupenga
   Unitlvl: 1
+  enemyType: 0
+  elementType: 0
   dmg: 10
   defendedDmg: 5
   maxHp: 50
   currentHp: 50
-  fireBlastDmg: 15
-  burningDmg: 3
-  burningTurnsLeft: 0
-  icePistolDmg: 15
-  freezingDmg: 3
-  freezingTurnsLeft: 0
+  maxMp: 0
+  currentMp: 0
+  battleSystems: {fileID: 0}
+  slider: {fileID: 0}
+  flameIcon: {fileID: 9005482804032367811, guid: bf31ee80a16975c49af2141363889098, type: 3}
+  lingeringDamageTurns: 0
   isDefending: 0
   isOnFire: 0
   isBlownAway: 0
