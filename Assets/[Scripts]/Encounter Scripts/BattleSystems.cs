@@ -3,7 +3,15 @@ using TMPro;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
-public enum BattleState { START, PLAYERTURN, ENEMYTURN, WON, LOST }
+/* Usefull Scripts
+ * 
+ * Sets the Slider InGame - must be done after ever action that effects health
+ * "playerHud.HpSet(playerUnit.currentHp);"
+ * 
+ * 
+ */
+
+public enum BattleState { START, PLAYERTURN, ENEMYTURN, WON, LOST, FINISH }
 
 public class BattleSystems : MonoBehaviour
 {
@@ -48,13 +56,13 @@ public class BattleSystems : MonoBehaviour
     public bool inBattle;
 
     [SerializeField]
-    private BattleState states;
+    public BattleState states;
 
     [Header("Encounter Window")]
     [SerializeField]
-    private GameObject encounterwindow;
+    public GameObject encounterwindow;
     [SerializeField]
-    private TMP_Text encounterTxt;
+    public TMP_Text encounterTxt;
 
     // Start is called before the first frame update
     public void Start()
@@ -67,19 +75,20 @@ public class BattleSystems : MonoBehaviour
         {
             if (inBattle == false)
             {
-                states = BattleState.START; 
+                states = BattleState.START;
                 StartCoroutine(BattleSetup());
             }
         }
     }
 
+    // BattleSetup Coroutine
     IEnumerator BattleSetup()
     {
         inBattle = true;
         GameObject player = Instantiate(playerPrefab, playerPlatform);
         playerUnit = player.GetComponent<Unit>();
 
-        var rndIndex = Random.Range(0, enemyPrefabs.Length -1);
+        var rndIndex = Random.Range(0, enemyPrefabs.Length - 1);
         currentEnemy = enemyPrefabs[rndIndex];
 
         GameObject enemy = Instantiate(currentEnemy, enemyPlatform);
@@ -98,77 +107,35 @@ public class BattleSystems : MonoBehaviour
     }
 
     // Player/Enemy Menu Coroutines
-    public IEnumerator PlayerAttack()
-    {
-        playerUnit.basicAttack.UseBasicAttack(enemyUnit);
-        encounterTxt.text = "The Attack Was Successfull!";
-
-        yield return new WaitForSeconds(2.0f);
-    }
-
-    IEnumerator PlayerFireBlast()
-    {
-        playerUnit.fireBlast.UseFireBlast(enemyUnit);
-        encounterTxt.text = "You Used Fire Blast Successfully!";
-        enemyFireIcon.SetActive(true);
-
-        if (enemyUnit.currentHp <= 0)
-        {
-            states = BattleState.WON;
-            StartCoroutine(EndBattle());
-        }
-
-        yield return new WaitForSeconds(2.0f);
-        states = BattleState.ENEMYTURN;
-        StartCoroutine(EnemyTurn());
-    }
     IEnumerator EnemyFireBlast()
     {
-        enemyUnit.fireBlast.UseFireBlast(playerUnit);
-        encounterTxt.text = enemyUnit.name + " Used Fire Blast Successfully!";
+
+        enemyUnit.UseFireBlast(playerUnit);
+        encounterTxt.text = enemyUnit.name + " Used Fire Blast!";
 
         yield return new WaitForSeconds(2.0f);
         states = BattleState.PLAYERTURN;
         PlayerTurn();
-    }
-
-    IEnumerator PlayerWindCannon()
-    {
-        playerUnit.windCannon.UseWindCannon(enemyUnit);
-        encounterTxt.text = "You Used Wind Cannon Successfully!";
-
-        yield return new WaitForSeconds(2.0f);
-        states = BattleState.ENEMYTURN;
-        StartCoroutine(EnemyTurn());
-    }
-    IEnumerator EnemyWindCannon()
-    {
-        enemyUnit.windCannon.UseWindCannon(playerUnit);
-        encounterTxt.text = enemyUnit.name + " Used Wind Cannon Successfully!";
-
-        yield return new WaitForSeconds(2.0f);
-        states = BattleState.PLAYERTURN;
-        PlayerTurn();
-    }
-
-    IEnumerator PlayerIcePistol()
-    {
-        playerUnit.icePistol.UseIcePistol(enemyUnit);
-        encounterTxt.text = "You Used Wind Cannon Successfully!";
-
-        yield return new WaitForSeconds(2.0f);
-        states = BattleState.ENEMYTURN;
-        StartCoroutine(EnemyTurn());
     }
     IEnumerator EnemyIcePistol()
     {
-        enemyUnit.icePistol.UseIcePistol(playerUnit);
-        encounterTxt.text = enemyUnit.name + " Used Ice Pistol Successfully!";
+        enemyUnit.UseIcePistol(playerUnit);
+        encounterTxt.text = enemyUnit.name + " Used Ice Pistol!";
 
         yield return new WaitForSeconds(2.0f);
         states = BattleState.PLAYERTURN;
         PlayerTurn();
     }
+    IEnumerator EnemyWindCannon()
+    {
+        enemyUnit.UseWindCannon(playerUnit);
+        encounterTxt.text = enemyUnit.name + " Used Wind Cannon!";
+
+        yield return new WaitForSeconds(2.0f);
+        states = BattleState.PLAYERTURN;
+        PlayerTurn();
+    }
+
 
     // Enemy Behavior Coroutines
     public IEnumerator EnemyTurn()
@@ -176,19 +143,19 @@ public class BattleSystems : MonoBehaviour
         ////////// 1. Pre Round - Enemy Status Check //////////
 
         // No damage, but cant attack for one turn
-        if (enemyUnit.isBlownAway) 
+        if (enemyUnit.isBlownAway)
         {
             encounterTxt.text = enemyUnit.Unitname + " Has Being Blown Into The Air, They Cannot Attack";
             yield return new WaitForSeconds(2.0f);
             enemyUnit.isBlownAway = false;
-            // 3. Changeing to players turn
+            // 3. Changing to players turn
             states = BattleState.PLAYERTURN;
             PlayerTurn();
             yield break;
         }
 
         // Where the enemy takes damage from being on fire
-        if (enemyUnit.isOnFire) 
+        if (enemyUnit.isOnFire)
         {
             enemyUnit.currentHp -= playerUnit.fireBlast.lingeringDamage;
             encounterTxt.text = enemyUnit.Unitname + " Has Lost: " + playerUnit.fireBlast.lingeringDamage + " Damage";
@@ -206,7 +173,7 @@ public class BattleSystems : MonoBehaviour
         // If More Abilities Are Added, Make sure to add Pre Turn Damage "if's" Here
 
         // If no Ailments 
-        if(!enemyUnit.isFrozen && !enemyUnit.isOnFire && !enemyUnit.isBlownAway)
+        if (!enemyUnit.isFrozen && !enemyUnit.isOnFire && !enemyUnit.isBlownAway)
         {
             encounterTxt.text = "No Ailments";
             yield return new WaitForSeconds(2.0f);
@@ -224,7 +191,7 @@ public class BattleSystems : MonoBehaviour
         // d.Attack/Defend
 
         // a.Flee - Enemy will attempt to flee if its HP is under 5 and MP under the cost of Healing
-        if (enemyUnit.currentHp <= 5 && enemyUnit.currentMp < enemyUnit.flee.abilityCost)
+        if (enemyUnit.currentHp <= 5 && enemyUnit.currentMp < enemyUnit.flea.abilityCost)
         {
             //Enemy Attempts to flee
             states = BattleState.WON;
@@ -239,7 +206,7 @@ public class BattleSystems : MonoBehaviour
             //-Heal-
             encounterTxt.text = "The Enemy Used Healed and regained 25 Hp";
             yield return new WaitForSeconds(1.0f);
-            enemyUnit.Heal(25);
+            enemyUnit.Heal();
             enemyHud.HpSet(enemyUnit.currentHp);
             yield return new WaitForSeconds(2.0f);
         }
@@ -270,8 +237,8 @@ public class BattleSystems : MonoBehaviour
         //-Attack-
         if (num3 <= 7)
         {
+            enemyUnit.Attack(playerUnit, enemyUnit.basicAttackDmg);
             encounterTxt.text = enemyUnit.Unitname + " Attacks";
-            bool isDead = playerUnit.TakeDamage(enemyUnit.dmg);
             playerHud.HpSet(playerUnit.currentHp);
         }
 
@@ -319,43 +286,76 @@ public class BattleSystems : MonoBehaviour
 
     public void PlayerTurn()
     {
-        if (playerUnit.currentHp <= 0)
-        {
-            states = BattleState.LOST;
-            EndBattle();
-        }
+        // Check for Ailments
 
-        if (playerFireIcon.activeSelf)
-        {
-            playerUnit.currentHp -= enemyUnit.fireBlast.lingeringDamage;
-            encounterTxt.text = "You Took Burning Damage";
-            playerUnit.fireBlast.lingeringDamageTurnsLeft--;
-            if (playerUnit.fireBlast.lingeringDamageTurnsLeft == 0)
-            {
-                playerFireIcon.SetActive(false);
-            }
-        }
+
+        // Waiting for Player to Select An Action
         encounterTxt.text = "Please Choose An Action:";
     }
 
-    public IEnumerator EndBattle()
+    public void EndBattle()
     {
-        if (states == BattleState.WON)
-        {
-            encounterTxt.text = "You Have Defeated The Enemy";
-        }
-        if (states == BattleState.LOST)
-        {
-            encounterTxt.text = "You Have Been Defeated";
-        }
-        yield return new WaitForSeconds(2.0f);
         Reset();
         encounterwindow.SetActive(false);
-        StartCoroutine(BattleSetup());
+    }
+    // -- Player Buttons and Coroutines --
+
+    // Action Buttons
+    public void OnAttackButton()
+    {
+        playerUnit.Attack(enemyUnit, playerUnit.basicAttackDmg);
+        encounterTxt.text = playerUnit.Unitname + " Used FireBlast";
+
+        ChangeGameState();
+    }
+    public void OnHealButton()
+    {
+        playerUnit.Heal();
+
+        ChangeGameState();
+    }
+    public void OnDefendButton()
+    {
+        //TODO: insert defending function from the unit script here
+        encounterTxt.text = playerUnit.Unitname + " Used Defend, Reduced Incoming Dmg";
+
+        ChangeGameState();
+    }
+
+    // Ability Buttons
+    public void OnFireBlastButton()
+    {
+        //TODO: insert "Chance Of Hitting Target"
+        enemyFireIcon.SetActive(true);
+        playerUnit.UseFireBlast(enemyUnit);
+        encounterTxt.text = playerUnit.Unitname + " Used FireBlast";
+
+        ChangeGameState();
+
+    }
+    public void OnIcePistolButton()
+    {
+        //TODO: insert "Chance Of Hitting Target"
+        enemyIceIcon.SetActive(true);
+        playerUnit.UseIcePistol(enemyUnit);
+        encounterTxt.text = playerUnit.Unitname + " Used IcePistol";
+
+        ChangeGameState();
+    }
+    public void OnWindCannonButton()
+    {
+        //TODO: insert "Chance Of Hitting Target"
+        enemyWindIcon.SetActive(true);
+        playerUnit.UseWindCannon(enemyUnit);
+        encounterTxt.text = playerUnit.Unitname + " Used WindCannon";
+
+        StartCoroutine(ChangeGameState());
     }
 
 
-    //Resets Battle
+
+    // BattleScript Function Library
+    // Reset Battle System
     public void Reset()
     {
         //player reset
@@ -388,54 +388,49 @@ public class BattleSystems : MonoBehaviour
         enemyUnit.isOnFire = false;
         enemyFireIcon.SetActive(false);
     }
-
-
-    // --Buttons--
-
-    // Action Buttons
-    public void OnAttackButton()
+    // Couples together the two functions CheckForEndOfGame and ChangeTurns
+    public IEnumerator ChangeGameState()
     {
-        if (states != BattleState.PLAYERTURN)
-            return;
+        yield return new WaitForSeconds(2.0f);
 
-        StartCoroutine(PlayerAttack());
-    }
-    public void OnHealButton()
-    {
-        if (states != BattleState.PLAYERTURN)
-            return;
+        CheckForEndGame();
 
-        // Player Heals
-    }
-    public void OnDefendButton()
-    {
-        if (states != BattleState.PLAYERTURN)
-            return;
+        yield return new WaitForSeconds(2.0f);
 
-        // Player Defenends
+        ChangeTurns();
     }
-
-    // Ability Buttons
-    public void OnFireBlastButton()
+    public IEnumerator CheckForEndGame()
     {
-        if (states != BattleState.PLAYERTURN)
-            return;
-        enemyFireIcon.SetActive(true);
-        StartCoroutine(PlayerFireBlast());
+        //Checks to see if enemy is still alive
+        if (enemyUnit.currentHp <= 0)
+        {
+            encounterTxt.text = "You Have Defeated the Enemy";
+            yield return new WaitForSeconds(2.0f);
+            states = BattleState.FINISH;
+            EndBattle();
+        }
+        //Checks to see if player is still alive
+        if (playerUnit.currentHp <= 0)
+        {
+            encounterTxt.text = "You Have Been Defeated";
+            yield return new WaitForSeconds(2.0f);
+            states = BattleState.FINISH;
+            EndBattle();
+        }
+        // If player and enemy are still alive, the Game Continues
     }
-    public void OnWindCannonButton()
+    public void ChangeTurns()
     {
-        if (states != BattleState.PLAYERTURN)
-            return;
-        enemyWindIcon.SetActive(true);
-        StartCoroutine(PlayerWindCannon());
+        // Change Turns
+        if (states != BattleState.ENEMYTURN)
+        {
+            states = BattleState.ENEMYTURN;
+            StartCoroutine(EnemyTurn());
+        }
+        else
+        {
+            states = BattleState.PLAYERTURN;
+            PlayerTurn();
+        }
     }
-    public void OnIcePistolButton()
-    {
-        if (states != BattleState.PLAYERTURN)
-            return;
-        enemyIceIcon.SetActive(true);
-        StartCoroutine(PlayerIcePistol());
-    }
-
 }
